@@ -15,18 +15,21 @@ date posted
 comments
 """
 
+# Run every day at midnight
+
+
+# For determining if a post from the subreddit is within the desired range
+
 
 def is_yesterday(timestamp):
-    # For determining if a post from the subreddit is within the desired range
-
     midnight = datetime.combine(datetime.today(), time.min)
     yesterday_midnight = (midnight - timedelta(days=1))
     return yesterday_midnight.timestamp() <= timestamp < midnight.timestamp()
 
+# Gets the posts for the day in the given subreddit and returns the data in a dictionary
+
 
 def get_posts_for_day(subreddit):
-    # Gets the posts for the day in the given subreddit and returns the data in a dictionary
-
     topics_dictionary = {"Title": [], "Score": [], "URL": [],
                          "Number of Comments": [], "Created On": [], "Body": []}
 
@@ -44,21 +47,6 @@ def get_posts_for_day(subreddit):
 
 
 def parse_subreddits():
-    # Run every day at midnight
-    session = Session()
-    reddit = praw.Reddit(client_id='Q8FkH2LSqlFeqg',
-                         client_secret='3Fe1o1_LTgp53yijN2JU9BOqX6U',
-                         user_agent='script:midterm_data:1.0 (by /u/Luxxee)',
-                         requestor_kwargs={'session': session},
-                         username='Luxxee',
-                         password='cheyenne')
-
-    reddit.read_only = True
-
-    # Get the ID of the folder made to store today's data
-    folder_for_day = create_folder(
-        str(datetime.today()), '1ab8g1EWSS1PcLibWwD83sXLGtzQds4IJ')
-
     # Establish Subreddits
     subreddits = ['BlueMidterm2018', 'politics',
                   'massachusettspolitics', 'mainepolitics', 'vermontpolitics']
@@ -74,3 +62,21 @@ def parse_subreddits():
         topics_data.to_csv(name, index=False)
         # Upload to drive
         upload_sheet(name, folder_for_day)
+
+
+def main():
+    session = Session()
+    reddit = praw.Reddit(client_id='Q8FkH2LSqlFeqg',
+                         client_secret='3Fe1o1_LTgp53yijN2JU9BOqX6U',
+                         user_agent='script:midterm_data:1.0 (by /u/Luxxee)',
+                         requestor_kwargs={'session': session},
+                         username='Luxxee',
+                         password='cheyenne')
+
+    reddit.read_only = True
+
+    # Get the ID of the folder made to store today's data
+    folder_for_day = create_folder(
+        str(datetime.today()), '1ab8g1EWSS1PcLibWwD83sXLGtzQds4IJ')
+
+    parse_subreddits()

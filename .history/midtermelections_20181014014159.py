@@ -15,18 +15,18 @@ date posted
 comments
 """
 
+# For determining if a post from the subreddit is within the desired range
+
 
 def is_yesterday(timestamp):
-    # For determining if a post from the subreddit is within the desired range
-
     midnight = datetime.combine(datetime.today(), time.min)
     yesterday_midnight = (midnight - timedelta(days=1))
     return yesterday_midnight.timestamp() <= timestamp < midnight.timestamp()
 
+# Gets the posts for the day in the given subreddit and returns the data in a dictionary
+
 
 def get_posts_for_day(subreddit):
-    # Gets the posts for the day in the given subreddit and returns the data in a dictionary
-
     topics_dictionary = {"Title": [], "Score": [], "URL": [],
                          "Number of Comments": [], "Created On": [], "Body": []}
 
@@ -44,7 +44,6 @@ def get_posts_for_day(subreddit):
 
 
 def parse_subreddits():
-    # Run every day at midnight
     session = Session()
     reddit = praw.Reddit(client_id='Q8FkH2LSqlFeqg',
                          client_secret='3Fe1o1_LTgp53yijN2JU9BOqX6U',
